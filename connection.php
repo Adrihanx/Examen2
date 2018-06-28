@@ -12,11 +12,28 @@
     $salario = $_POST['salario'];
     $image = $_FILES['image']['name'];
     $imagetype =  $_FILES['image']['type'];
-    $string ="insert into empleados (nombre,salario,url_foto) values ('$name','$salario','$image')";
-    if($resultado = mysqli_query($conexion,$string)){
-      move_uploaded_file($_FILES['image']['tmp_name'], "user/" . $_FILES['image']['name']);
-      header("Location: index.php");
+    if ($imagetype == "image/png") {
+      $string ="insert into empleados (nombre,salario,url_foto) values ('$name','$salario','$image')";
+      if($resultado = mysqli_query($conexion,$string)){
+        $result = move_uploaded_file($_FILES['image']['tmp_name'], "img/" . $image);
+        echo '
+         <table style="width:100%">
+          <tr>
+          <th>Nombre</th>
+    <th>Salario</th>
+    <th>Imagen</th>
+  </tr>
+  <tr>
+    <td>'.$name.'</td>
+    <td>'.$salario.'</td>
+    <td><img src="img/'.$image.' "></td>
+  </tr>
+</table> 
+        ';
+      }else{
+        echo "Error". mysqli_connect_error();
+      }
     }else{
-      echo "Error". mysqli_connect_error();
+      header("Location: index.html");
     }
 ?>
